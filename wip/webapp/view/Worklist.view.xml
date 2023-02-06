@@ -1,84 +1,94 @@
 <mvc:View
     controllerName="com.chappota.wip.controller.Worklist"
     xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:core="sap.ui.core"
+    xmlns:t="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:sv="sap.ui.comp.smartvariants"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:semantic="sap.f.semantic">
+    xmlns:semantic="sap.f.semantic"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page">
+                    <content>
+                        <smartFilterBar:SmartFilterBar
+                            id="smartFilterBarINV"
+                            entitySet="YY1_WIPENTRIES"
+                            filterContainerWidth="15.22em"
+                            smartVariant="__SVM01"
+                            class="smart-filters-dialog"
+                            initialized="onInitSmartFilter"
+                            liveMode="false"
+                            showFilterConfiguration="true"
+                            useToolbar="true"
+                            filterBarExpanded="true"
+                            showClearOnFB="true"
+                            clear="onClear"
+                            beforeVariantFetch="onBeforeVariantFetch"
+                            afterVariantLoad="onAfterVariantLoad"
+                            persistencyKey="SmartFilter_Explored"                            
+                            showGoOnFB="false"
+                        >
+                    <smartFilterBar:controlConfiguration>
+                              <smartFilterBar:ControlConfiguration id="12" key="TimeEntryID"
+                                    visibleInAdvancedArea="true" index="0" label="TimeEntryID"
+                                    hasValueHelpDialog="false">   
 
-    <semantic:SemanticPage
-        id="page"
-        headerPinnable="false"
-        toggleHeaderOnTitleClick="false">
+											  <!-- <smartFilterBar:customControl>
+											        <DatePicker />
+											    </smartFilterBar:customControl> -->
+				                                
+				               </smartFilterBar:ControlConfiguration>                                
+                                
+                            </smartFilterBar:controlConfiguration>
+                        </smartFilterBar:SmartFilterBar>
+                         
+				
+              
+                        <smartTable:SmartTable smartVariant="__SVM01" entitySet="YY1_WIPENTRIES" 
+                    
+                        id="smartTable" beforeRebindTable="onBeforeRebindTable" smartFilterId="smartFilterBarINV"
+                        tableType="Table" beforeExport="onBeforeExport" useVariantManagement="true"
+                        header="WIP" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored"
+                        enableAutoBinding="true" useTablePersonalisation="true" demandPopin="false"
+                        class="sapUiResponsiveContentPadding sapUiMediumMarginBottom"
+                        initiallyVisibleFields="TimeEntryID,JournalEntryID,Description,Type,Type_Text,PostingDate,Quantity,Units,BasePrice,NetAmount,Notes"
+                        editTogglable="false" customData:useSmartToggle="true" showTablePersonalisation="false"
+                        placeToolbarInTable="true" ignoredFields="Status_txt">                      
 
-        <semantic:titleHeading>
-            <Title
-                text="{i18n>worklistTitle}"
-                level="H2"/>
-        </semantic:titleHeading>
+					<smartTable:customToolbar>
+                            <OverflowToolbar id="_IDGenOverflowToolbar1" design="Transparent">
+                                <ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                                <Button id="_IDGenButton1" icon="sap-icon://sort" press="onSort" class="iconWhite"/>
+                                <Button id="buttoncolumns" icon="sap-icon://action-settings" tooltip="Column Settings" press="onColumns"
+                                    class="iconWhite" />
+                            </OverflowToolbar>
+                        </smartTable:customToolbar>
+                        <!-- <t:Table id="table1">
+                            <t:columns>
+                                <t:Column id="idcolumn1" width="11rem" sortProperty="TimeEntryID" filterProperty="TimeEntryID">
+                                    <t:customData>
+                                        <core:CustomData key="p13nData"
+                                            value='\{"columnKey": "TimeEntryID", "leadingProperty": "TimeEntryID", "columnIndex": 0}' />
+                                    </t:customData>
+                                    <Label id="labelpspid" text="{i18n>txt_pspid}" />
+                                    <t:template>
+                                        <Link id="linkpspid" text="{JournalEntryID}" wrapping="false" press="fnPspidPress" />
+                                    </t:template>
+                                </t:Column>
+                            </t:columns>
+                        </t:Table>                        -->
+                    </smartTable:SmartTable>
 
-        <semantic:content>
-            <Table
-                id="table"
-                width="auto"
-                items="{
-                    path: '/YY1_WIPENTRIES',
-                    sorter: {
-                        path: 'JournalEntryID',
-                        descending: false
-                    }
-                }"
-                noDataText="{worklistView>/tableNoDataText}"
-                busyIndicatorDelay="{worklistView>/tableBusyDelay}"
-                growing="true"
-                growingScrollToLoad="true"
-                updateFinished=".onUpdateFinished">
-
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <Title
-                            id="tableHeader"
-                            text="{worklistView>/worklistTableTitle}"
-                            level="H3"/>
-                        <ToolbarSpacer />
-                        <SearchField
-                            id="searchField"
-                            tooltip="{i18n>worklistSearchTooltip}"
-                            search=".onSearch">
-                            <layoutData>
-                                <OverflowToolbarLayoutData
-                                    maxWidth="200px"
-                                    priority="NeverOverflow"/>
-                            </layoutData>
-                        </SearchField>
-                    </OverflowToolbar>
-                </headerToolbar>
-
-                <columns>
-                    <Column id="nameColumn">
-                        <Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
-                    </Column>
-                    <Column id="unitNumberColumn" hAlign="End">
-                        <Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
-                    </Column>
-                </columns>
-
-                <items>
-                    <ColumnListItem
-                        type="Navigation"
-                        press=".onPress">
-                        <cells>
-                            <ObjectIdentifier
-                                title="{JournalEntryID}"/>
-                            <ObjectNumber />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </semantic:content>
-
-        <semantic:sendEmailAction>
-            <semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
-        </semantic:sendEmailAction>
-
-    </semantic:SemanticPage>
-
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
 </mvc:View>
